@@ -83,4 +83,15 @@ where planned_quantity > (select avg(planned_quantity) from work_orders);
 
 -- Tìm sản phẩm có ít nhất một lệnh sản xuất đã hoàn thành.
 select p.id, p.name from products p
-where exists (select 1 from work_orders wo where wo.product_id = p.id and wo.status = 'COMPLETED')
+where exists (select 1 from work_orders wo where wo.product_id = p.id and wo.status = 'COMPLETED');
+
+-- union => loại bỏ các dòng trùng
+-- union all=> giữ nguyên các dòng trùng, cost less
+-- đều cần cùng số cột và kiểu dữ liệu
+select order_code, status from work_orders
+where status = 'PLANNED'
+
+union all
+
+select order_code, status from work_orders
+where status = 'COMPLETED';
